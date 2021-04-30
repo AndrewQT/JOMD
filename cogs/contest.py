@@ -20,7 +20,7 @@ from operator import itemgetter
 class Contest(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    
+
     @commands.command(usage="[contest key]")
     async def ranklist(self, ctx, key):
         """List rating predictions of a contest"""
@@ -43,7 +43,7 @@ class Contest(commands.Cog):
             return handle.handle
 
         usernames = list(map(to_handle, handles))
-        
+
         # The only way to calculate rating changes is by getting the volitility of all the users
         # that means 100+ seperate api calls
         # How does evan do it?
@@ -58,7 +58,7 @@ class Contest(commands.Cog):
         # Filter for those who participated in contest
         user_rankings = list(map(itemgetter("user"), contest.rankings))
         usernames = list(set(usernames) & set(user_rankings))
-        
+
         # The length is 0 is contest is still ongoing
         problems = len(contest.problems)
 
@@ -162,6 +162,21 @@ class Contest(commands.Cog):
         output += "\n"
         await ctx.send("```yaml\n"+output+"```")
 
+    @commands.command(usage="[contest key]")
+    async def timeleft(self, ctx, contest_input, user_input){
+        """
+        q = session.query(Participation_DB).filer(Participation_DB.key == contest_input)
+        # Clear chache (AQT has no idea what this does)
+        if q.count:
+            q.delete()
+            session.commit()
+        query = Query()
+        """
+        query = Query()
+        participation = await query.get_participations(contest=key, user=username
+        time_difference = participation.end_time - datetime.datetime.isoformat()
+        await ctx.send("Time left:" time_difference);
+    }
 
 def setup(bot):
     bot.add_cog(Contest(bot))
